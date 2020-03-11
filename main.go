@@ -42,11 +42,15 @@ func main() {
 	err := filepath.Walk(*basePath, func(path string, f os.FileInfo, err error) error {
         if strings.HasSuffix(f.Name(), *ext) {
 			count = count + 1
-			fIn, finErr := os.Open(filepath.Join(*basePath, f.Name()))
+			inFileName := path
+			outFileName := path[:len(path) - len(*ext)]
+			log.Printf("    %s -> %s", inFileName, outFileName)
+
+			fIn, finErr := os.Open(inFileName)
 			if finErr != nil {
 				panic(finErr)
 			}
-			fOut, foutErr := os.Create(filepath.Join(*basePath, f.Name()[:len(f.Name()) - len(*ext)]))
+			fOut, foutErr := os.Create(outFileName)
 			if foutErr != nil {
 				panic(foutErr)
 			}
